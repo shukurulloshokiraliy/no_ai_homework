@@ -6,12 +6,17 @@ import vegetables from '../assets/images/vegetables.svg';
 import fruits from '../assets/images/fruits.svg';
 import supplies from '../assets/images/supplies.svg';
 import Flower from '../assets/images/flower.svg';
-
+import DetailPage from './DetailPage';
+import Hero from '../pages/Hero.jsx'
+import Blog from '../pages/Blog.jsx'
+import Carousel from '../pages/Carousel.jsx'
+import Seedra from '../pages/Seedra.jsx'
 const HomePage = () => {
   const [activeCategory, setActiveCategory] = useState('ALL');
   const [products, setProducts] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
   const categories = [
     { id: 'ALL', name: 'ALL', icon: all },
@@ -40,7 +45,8 @@ const HomePage = () => {
     }
   };
 
-  const toggleFavorite = (productId) => {
+  const toggleFavorite = (productId, e) => {
+    e.stopPropagation();
     setFavorites(prev => 
       prev.includes(productId) 
         ? prev.filter(id => id !== productId)
@@ -48,11 +54,27 @@ const HomePage = () => {
     );
   };
 
+  const handleProductClick = (productId) => {
+    setSelectedProductId(productId);
+    window.scrollTo(0, 0);
+  };
+
+  const handleBackToProducts = () => {
+    setSelectedProductId(null);
+    window.scrollTo(0, 0);
+  };
+
   const filteredProducts = activeCategory === 'ALL' 
     ? products 
     : products.filter(product => product.category === activeCategory.toLowerCase());
 
+  if (selectedProductId) {
+    return <DetailPage productId={selectedProductId} onBack={handleBackToProducts} />;
+  }
+
   return (
+<>
+<Hero></Hero>
     <div className="w-full bg-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
@@ -102,7 +124,8 @@ const HomePage = () => {
             {filteredProducts.map((product) => (
               <div 
                 key={product.id} 
-                className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300 group"
+                onClick={() => handleProductClick(product.id)}
+                className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300 group cursor-pointer"
               >
                 <div className="relative bg-gray-50 p-6 aspect-square flex items-center justify-center">
                   <img 
@@ -111,8 +134,8 @@ const HomePage = () => {
                     className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
                   />
                   <button
-                    onClick={() => toggleFavorite(product.id)}
-                    className="absolute top-4 right-4 p-2 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow"
+                    onClick={(e) => toggleFavorite(product.id, e)}
+                    className="absolute top-4 right-4 p-2 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow z-10"
                   >
                     <svg 
                       className={`w-5 h-5 ${favorites.includes(product.id) ? 'fill-yellow-400 stroke-yellow-400' : 'fill-none stroke-gray-400'}`}
@@ -153,7 +176,12 @@ const HomePage = () => {
                         </span>
                       )}
                     </div>
-                    <button className="p-2 text-green-600 hover:bg-green-50 rounded-full transition-colors">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      className="p-2 text-green-600 hover:bg-green-50 rounded-full transition-colors"
+                    >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
@@ -172,6 +200,10 @@ const HomePage = () => {
         )}
       </div>
     </div>
+     <Blog></Blog>
+     <Carousel></Carousel>
+     <Seedra></Seedra>
+</>
   );
 };
 
