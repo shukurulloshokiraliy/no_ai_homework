@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Skeleton from '@mui/material/Skeleton';
 import all from '../assets/images/all.svg';
 import bundeles from '../assets/images/bundles.svg';
 import herbs from '../assets/images/herbs.svg';
@@ -76,14 +75,14 @@ const HomePage = () => {
 
   const ProductSkeleton = () => (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-      <Skeleton variant="rectangular" height={280} />
+      <div className="bg-gray-200 animate-pulse aspect-square"></div>
       <div className="p-4">
-        <Skeleton variant="text" width="60%" height={20} />
-        <Skeleton variant="text" width="100%" height={16} sx={{ mt: 1 }} />
-        <Skeleton variant="text" width="80%" height={16} />
-        <div className="flex items-center justify-between mt-3">
-          <Skeleton variant="text" width={80} height={32} />
-          <Skeleton variant="circular" width={40} height={40} />
+        <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4 mb-2"></div>
+        <div className="h-3 bg-gray-200 rounded animate-pulse w-full mb-1"></div>
+        <div className="h-3 bg-gray-200 rounded animate-pulse w-5/6 mb-3"></div>
+        <div className="flex items-center justify-between">
+          <div className="h-8 bg-gray-200 rounded animate-pulse w-20"></div>
+          <div className="h-10 w-10 bg-gray-200 rounded-full animate-pulse"></div>
         </div>
       </div>
     </div>
